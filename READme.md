@@ -40,50 +40,79 @@ Avant de commencer, assurez-vous d'avoir installé :
 ## Installation & Utilisation 🔧
 Pour démarrer avec ce projet :
 
-1. **Cloner le dépôt principal avec les sous-modules** :
+1. 🚀 **Cloner le dépôt principal avec les sous-modules** :
    ```bash
    git clone --recurse-submodules https://github.com/Moonyelit/CheckPoint.git
    ```
 
-2. **Accéder au dossier principal** :
+2. 📁 **Accéder au dossier principal** :
    ```bash
    cd CheckPoint
    ```
 
-3. **Installer les dépendances pour le front-end (Next.js)** :
+3. 📦 **Installer les dépendances pour le front-end (Next.js)** :
    ```bash
    cd CheckPoint-Next.JS
    npm install
+   # Si vous avez des erreurs de dépendances manquantes, installez-les manuellement, par exemple :
+   # npm install next @tailwindcss/postcss
    ```
 
-4. **Installer les dépendances pour le back-end (Symfony)** :
+4. 📦 **Installer les dépendances pour le back-end (Symfony)** :
    ```bash
    cd ../CheckPoint-API
    composer install
    ```
 
-5. **Configurer les fichiers d'environnement** :
+5. ⚙️ **Configurer les fichiers d'environnement** :
    - **Pour le front-end** : Créez un fichier `.env.local` dans `CheckPoint-Next.JS` avec le contenu suivant pour faire le lien avec l'API :
      ```
      NEXT_PUBLIC_API_URL=http://localhost:8000
      ```
    - **Pour le back-end** : Créez un fichier `.env.local` dans `CheckPoint-API` et configurez les variables d'environnement (ex. connexion à la base de données).
 
-6. **Lancer les applications** :
-   - **Front-end (Next.js)** :
+6. 🗄️ **Lancer les migrations de la base de données** (obligatoire avant d'importer les jeux) :
+   ```bash
+   cd CheckPoint-API
+   php bin/console doctrine:migrations:migrate --no-interaction
+   ```
+
+7. 🎮 **Importer les jeux IGDB** (optionnel, si besoin) :
+   ```bash
+   php bin/console app:import-games
+   ```
+
+8. 🖥️ **Lancer les applications** :
+   - **Avec les commandes classiques** :
+     - **Front-end (Next.js)** :
+       ```bash
+       cd ../CheckPoint-Next.JS
+       npm run dev
+       ```
+     - **Back-end (Symfony)** :
+       ```bash
+       cd ../CheckPoint-API
+       symfony serve
+       ```
+   - **OU avec le Makefile** (plus simple) :
      ```bash
-     cd ../CheckPoint-Next.JS
-     npm run dev
-     ```
-   - **Back-end (Symfony)** :
-     ```bash
-     cd ../CheckPoint-API
-     symfony serve
+     make start 🚦
+     # Pour arrêter : make stop 🛑
+     # Pour redémarrer : make restart 🔄
+     # Pour nettoyer le cache Next.js : make clean 🧹
+     # Pour recompiler le build Next.js : make build 🏗️
+     # Pour build hot-reload : make build-hot ♨️
      ```
 
-7. **Accéder à l'application** :
+9. 🌐 **Accéder à l'application** :
    - Front-end : Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
    - Back-end : L'API sera accessible à l'adresse [http://localhost:8000](http://localhost:8000).
+
+---
+
+**Remarque ⚠️ :**
+- Si vous rencontrez des erreurs de dépendances lors du build Next.js, vérifiez que tous les modules nécessaires sont installés (`next`, `@tailwindcss/postcss`, etc.).
+- Pour toute question, consultez la section Contact en bas du README. 💬
 
 ## Parties du projet 📁
 Ce projet est composé de plusieurs parties distinctes :
