@@ -2,6 +2,9 @@
 
 ## Démarrage des serveurs
 
+
+LANCER WAMPSERVER
+
 ### Serveur Symfony (Backend)
 ```bash
 cd CheckPoint-API
