@@ -36,6 +36,11 @@ npm run dev
 
 ## 🔧 Commandes de développement
 
+### Nettotage du cache API
+```bash
+cd CheckPoint-API
+php bin/console cache:clear --env=dev
+
 ### Nettoyage du cache Next.js
 ```bash
 cd CheckPoint-Next.JS
