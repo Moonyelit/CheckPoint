@@ -12,128 +12,119 @@
 
 ### 1. Serveur Symfony (Backend)
 ```bash
-# Se déplacer dans le bon répertoire
 cd CheckPoint-API
-
-# Démarrer le serveur
 symfony serve
-```
-
-**Alternative en mode daemon (arrière-plan) :**
-```bash
-cd CheckPoint-API
-symfony serve -d
 ```
 
 ### 2. Serveur Next.js (Frontend)
 ```bash
-# Se déplacer dans le bon répertoire
 cd CheckPoint-Next.JS
-
-# Démarrer le serveur de développement
 npm run dev
 ```
 
-## 🔧 Commandes de développement
+## 📊 Commandes principales
 
-### Nettotage du cache API
+### Gestion des wallpapers
 ```bash
+# Scanner les wallpapers manquants
+php bin/console app:scan-wallpapers
+
+# Importer les wallpapers depuis la config
+php bin/console app:import-wallpapers-config
+
+# Forcer l'import des wallpapers
+php bin/console app:import-wallpapers-config --force
+```
+
+### Gestion des jeux
+```bash
+# Importer le Top 100 des jeux
+php bin/console app:import-top100-games
+
+# Importer les meilleurs jeux de l'année
+php bin/console app:import-top-year-games
+
+# Nettoyer les jeux de faible qualité
+php bin/console app:clean-low-quality-games
+```
+
+### Maintenance des images
+```bash
+# Debug des images
+php bin/console app:debug-images
+
+# Correction des images
+php bin/console app:fix-images
+```
+
+## 🔧 Maintenance système
+
+### Nettoyage du cache
+```bash
+# API Symfony
 cd CheckPoint-API
-php bin/console cache:clear --env=dev
+php bin/console cache:clear
 
-### Nettoyage du cache Next.js
-```bash
+# Frontend Next.js
 cd CheckPoint-Next.JS
 rmdir /s /q .next
 npm run dev
 ```
 
-### Build Next.js
+### Mise à jour des dépendances
 ```bash
-cd CheckPoint-Next.JS
-npm run build
-```
+# API Symfony
+cd CheckPoint-API
+composer install
 
-### Build Next.js avec hot-reload
-```bash
-cd CheckPoint-Next.JS
-npm run build:hot
-```
-
-### Installer les dépendances Next.js
-```bash
+# Frontend Next.js
 cd CheckPoint-Next.JS
 npm install
 ```
 
-### Mettre à jour les dépendances Symfony
-```bash
-cd CheckPoint-API
-composer install
-```
+## 📝 Description des commandes
 
-## 🐛 Débogage et diagnostics
+### Commandes de wallpapers
+- `app:scan-wallpapers` : Scanne le dossier des wallpapers et détecte les nouveaux fichiers
+- `app:import-wallpapers-config` : Importe les wallpapers depuis le fichier de configuration
 
-### Vérifier l'état du serveur Symfony
+### Commandes de jeux
+- `app:import-top100-games` : Importe les 100 meilleurs jeux de tous les temps (note ≥85, votes ≥50)
+- `app:import-top-year-games` : Importe les meilleurs jeux de l'année (note ≥75, votes ≥100)
+- `app:clean-low-quality-games` : Supprime les jeux de faible qualité (moins de 30 votes)
+
+### Commandes de maintenance
+- `app:debug-images` : Analyse l'état des images sans faire de modifications
+- `app:fix-images` : Corrige et améliore la qualité des images
+
+## 🐛 Débogage
+
+### Vérifier l'état du serveur
 ```bash
 cd CheckPoint-API
 symfony server:status
-```
-
-### Voir les logs Symfony
-```bash
-cd CheckPoint-API
 symfony server:log
 ```
 
-### Vider le cache Symfony
-```bash
-cd CheckPoint-API
-symfony console cache:clear
-```
-
-### Vérifier les routes Symfony
+### Vérifier la configuration
 ```bash
 cd CheckPoint-API
 symfony console debug:router
-```
-
-### Vérifier la configuration Symfony
-```bash
-cd CheckPoint-API
 symfony console debug:config
-```
-
-### Tester l'API manuellement
-```bash
-# Test simple de l'API
-curl http://127.0.0.1:8000/api/games
-
-# Test avec PowerShell
-Invoke-WebRequest -Uri "http://127.0.0.1:8000/api/games" -Method GET
 ```
 
 ## ⏹️ Arrêt des serveurs
 
-### Arrêter Symfony (méthode douce)
+### Arrêter Symfony
 ```bash
 cd CheckPoint-API
 symfony server:stop
 ```
 
-### Arrêter Symfony (méthode forcée)
+### Arrêter Next.js
 ```bash
-taskkill /F /IM "symfony.exe" /T
-```
-
-### Arrêter Next.js (Ctrl+C dans le terminal ou méthode forcée)
-```bash
+# Ctrl+C dans le terminal ou
 taskkill /F /IM "node.exe" /T
-```
-
-### Arrêter tous les processus PHP (en cas de problème)
-```bash
-taskkill /F /IM "php-cgi.exe" /T
 ```
 
 ## 📊 URLs et endpoints
