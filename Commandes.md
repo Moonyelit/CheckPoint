@@ -13,7 +13,7 @@
 ### 1. Serveur Symfony (Backend)
 ```bash
 cd CheckPoint-API
-symfony serve
+symfony serve -d
 ```
 
 ### 2. Serveur Next.js (Frontend)
