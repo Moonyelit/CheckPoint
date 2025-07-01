@@ -24,6 +24,21 @@ npm run dev
 
 ## 📊 Commandes principales
 
+### Gestion des jeux
+```bash
+# Importer le Top 100 des jeux
+php bin/console app:import-top100-games
+
+# Importer les meilleurs jeux de l'année
+php bin/console app:import-top-year-games
+
+# Nettoyer les slugs des jeux
+php bin/console app:clean-game-slugs
+
+# Importer les screenshots pour les jeux existants
+php bin/console app:import-screenshots
+```
+
 ### Gestion des wallpapers
 ```bash
 # Scanner les wallpapers manquants
@@ -36,25 +51,13 @@ php bin/console app:import-wallpapers-config
 php bin/console app:import-wallpapers-config --force
 ```
 
-### Gestion des jeux
+### Maintenance et monitoring
 ```bash
-# Importer le Top 100 des jeux
-php bin/console app:import-top100-games
+# Surveiller l'intégrité des données
+php bin/console app:monitor-data-integrity
 
-# Importer les meilleurs jeux de l'année
-php bin/console app:import-top-year-games
-
-# Nettoyer les jeux de faible qualité
-php bin/console app:clean-low-quality-games
-```
-
-### Maintenance des images
-```bash
-# Debug des images
-php bin/console app:debug-images
-
-# Correction des images
-php bin/console app:fix-images
+# Afficher le Top 5 dédupliqué
+php bin/console app:show-top5-deduplicated
 ```
 
 ## 🔧 Maintenance système
@@ -84,18 +87,19 @@ npm install
 
 ## 📝 Description des commandes
 
+### Commandes de jeux
+- `app:import-top100-games` : Importe les 100 meilleurs jeux de tous les temps (note ≥75, votes ≥80) avec nettoyage automatique
+- `app:import-top-year-games` : Importe les meilleurs jeux de l'année (365 derniers jours, note ≥80, votes ≥50)
+- `app:clean-game-slugs` : Nettoie les slugs en supprimant les IDs IGDB pour des URLs propres
+- `app:import-screenshots` : Importe les screenshots depuis l'API IGDB pour les jeux qui n'en ont pas
+
 ### Commandes de wallpapers
 - `app:scan-wallpapers` : Scanne le dossier des wallpapers et détecte les nouveaux fichiers
-- `app:import-wallpapers-config` : Importe les wallpapers depuis le fichier de configuration
-
-### Commandes de jeux
-- `app:import-top100-games` : Importe les 100 meilleurs jeux de tous les temps (note ≥85, votes ≥50)
-- `app:import-top-year-games` : Importe les meilleurs jeux de l'année (note ≥75, votes ≥100)
-- `app:clean-low-quality-games` : Supprime les jeux de faible qualité (moins de 30 votes)
+- `app:import-wallpapers-config` : Importe les wallpapers depuis le fichier de configuration JSON
 
 ### Commandes de maintenance
-- `app:debug-images` : Analyse l'état des images sans faire de modifications
-- `app:fix-images` : Corrige et améliore la qualité des images
+- `app:monitor-data-integrity` : Surveille l'intégrité des données en base
+- `app:show-top5-deduplicated` : Affiche le Top 5 des jeux dédupliqués
 
 ## 🐛 Débogage
 
@@ -137,6 +141,7 @@ taskkill /F /IM "node.exe" /T
 ### Endpoints API principaux
 - **Jeux** : http://127.0.0.1:8000/api/games
 - **Top 100** : http://127.0.0.1:8000/api/games/top100
+- **Top Year** : http://127.0.0.1:8000/api/games/top100-year
 - **Inscription** : http://127.0.0.1:8000/api/register
 - **Connexion** : http://127.0.0.1:8000/api/login_check
 
@@ -165,6 +170,10 @@ taskkill /F /IM "node.exe" /T
 2. Vérifiez la configuration dans `CheckPoint-API/.env.local`
 3. Testez la connexion MySQL sur phpMyAdmin
 
+### Erreur de doublons de slugs
+1. Relancez le nettoyage des slugs : `php bin/console app:clean-game-slugs`
+2. Vérifiez l'unicité : `php bin/console doctrine:schema:validate`
+
 ## 📝 Notes importantes
 - **Toujours démarrer WampServer EN PREMIER**
 - Le serveur Symfony tourne sur http://127.0.0.1:8000
@@ -172,4 +181,5 @@ taskkill /F /IM "node.exe" /T
 - Pour arrêter proprement, utilisez Ctrl+C dans les terminaux respectifs
 - En cas d'erreur 500, vérifiez les logs avec `symfony server:log`
 - **ATTENTION** : Bien se placer dans les bons répertoires (`CheckPoint-API` ou `CheckPoint-Next.JS`)
-- Les variables d'environnement sont dans les fichiers `.env.local` de chaque projet 
+- Les variables d'environnement sont dans les fichiers `.env.local` de chaque projet
+- **Ordre recommandé pour les imports** : Top 100 → Top Year → Nettoyage slugs → Wallpapers → Screenshots 

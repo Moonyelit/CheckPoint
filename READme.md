@@ -43,75 +43,101 @@ Pour démarrer avec ce projet :
 1. 🚀 **Cloner le dépôt principal avec les sous-modules** :
    ```bash
    git clone --recurse-submodules https://github.com/Moonyelit/CheckPoint.git
-   ```
-
-2. 📁 **Accéder au dossier principal** :
-   ```bash
    cd CheckPoint
+   git submodule update --init --recursive
    ```
 
-3. 📦 **Installer les dépendances pour le front-end (Next.js)** :
+2. 📦 **Installer les dépendances pour le front-end (Next.js)** :
    ```bash
    cd CheckPoint-Next.JS
    npm install
-   # Si vous avez des erreurs de dépendances manquantes, installez-les manuellement, par exemple :
-   # npm install next @tailwindcss/postcss
    ```
 
-4. 📦 **Installer les dépendances pour le back-end (Symfony)** :
+3. 📦 **Installer les dépendances pour le back-end (Symfony API)** :
    ```bash
    cd ../CheckPoint-API
    composer install
    ```
+   Cela va générer les dossiers `vendor` et `var` nécessaires au bon fonctionnement de Symfony.
+
+4. ⚙️ **Générer les clés JWT pour l'authentification** :
+   ```bash
+   # Depuis le dossier CheckPoint-API
+   mkdir -p config/jwt
+   openssl genrsa -out config/jwt/private.pem -aes256 4096
+   openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+   ```
+   > **Attention :** Ne partagez jamais vos clés privées ou passphrases !
 
 5. ⚙️ **Configurer les fichiers d'environnement** :
-   - **Pour le front-end** : Créez un fichier `.env.local` dans `CheckPoint-Next.JS` avec le contenu suivant pour faire le lien avec l'API :
+   - **Pour le back-end** :
+     Créez un fichier `.env.local` dans `CheckPoint-API` et configurez vos variables d'environnement (connexion à la base de données, chemins des clés JWT, etc.).
+     > **Ne partagez jamais vos identifiants ou secrets dans un dépôt public.**
+   - **Pour le front-end** :
+     Créez un fichier `.env.local` dans `CheckPoint-Next.JS` avec par exemple :
      ```
-     NEXT_PUBLIC_API_URL=http://localhost:8000
+     NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+     NEXT_PUBLIC_BASE_URL=http://localhost:3000
+     # MAILTRAP_USER=... (optionnel pour l'envoi d'e-mails)
+     # MAILTRAP_PASSWORD=... (optionnel pour l'envoi d'e-mails)
      ```
-   - **Pour le back-end** : Créez un fichier `.env.local` dans `CheckPoint-API` et configurez les variables d'environnement (ex. connexion à la base de données).
+     > **Ne partagez jamais vos identifiants Mailtrap ou autres secrets !**
 
 6. 🗄️ **Lancer les migrations de la base de données** (obligatoire avant d'importer les jeux) :
    ```bash
    cd CheckPoint-API
    php bin/console doctrine:migrations:migrate --no-interaction
    ```
-
-7. 🎮 **Importer les jeux IGDB** (optionnel, si besoin) :
-   ```bash
-   php bin/console app:import-games
-   ```
-
-8. 🖥️ **Lancer les applications** :
-   - **Avec les commandes classiques** :
-     - **Front-end (Next.js)** :
-       ```bash
-       cd ../CheckPoint-Next.JS
-       npm run dev
-       ```
-     - **Back-end (Symfony)** :
-       ```bash
-       cd ../CheckPoint-API
-       symfony serve
-       ```
-   - **OU avec le Makefile** (plus simple) :
+7. 🎮 **Importer les jeux IGDB (obligatoire pour alimenter la base de données)** :
+   - **Importer le Top 100 des meilleurs jeux de tous les temps** :
      ```bash
-     make start 🚦
-     # Pour arrêter : make stop 🛑
-     # Pour redémarrer : make restart 🔄
-     # Pour nettoyer le cache Next.js : make clean 🧹
-     # Pour recompiler le build Next.js : make build 🏗️
-     # Pour build hot-reload : make build-hot ♨️
+     php bin/console app:import-top100-games
      ```
+     > Cette commande importe les 100 jeux les mieux notés et les plus populaires pour alimenter le classement principal.
+   - **Importer les meilleurs jeux récents de l'année** :
+     ```bash
+     php bin/console app:import-top-year-games
+     ```
+     > Cette commande importe les hits récents (sortis dans les 365 derniers jours) pour alimenter le carrousel d'accueil et les nouveautés.
 
-9. 🌐 **Accéder à l'application** :
-   - Front-end : Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
-   - Back-end : L'API sera accessible à l'adresse [http://localhost:8000](http://localhost:8000).
+8. 🧹 **Nettoyer les slugs des jeux** (obligatoire pour des URLs propres) :
+   ```bash
+   php bin/console app:clean-game-slugs
+   ```
+   > Cette commande nettoie les slugs en supprimant les IDs IGDB (ex: `persona-5` devient `persona`) pour avoir des URLs plus propres et SEO-friendly. À exécuter après chaque import de jeux.
+
+9. 🖼️ **Importer les wallpapers** (optionnel mais recommandé) :
+   ```bash
+   php bin/console app:import-wallpapers-config
+   ```
+   > Cette commande importe les wallpapers animés depuis le fichier `config/wallpapers.json` et crée les jeux associés s'ils n'existent pas. Ajoute de la diversité visuelle à l'application.
+
+10. 📸 **Importer les screenshots** (optionnel mais recommandé) :
+    ```bash
+    php bin/console app:import-screenshots
+    ```
+    > Cette commande récupère les screenshots depuis l'API IGDB pour les jeux qui n'en ont pas encore. Enrichit l'expérience utilisateur avec des images de gameplay.
+
+11. 🖥️ **Lancer les applications** :
+    - **Front-end (Next.js)** :
+      ```bash
+      cd ../CheckPoint-Next.JS
+      npm run dev
+      ```
+    - **Back-end (Symfony)** :
+      ```bash
+      cd ../CheckPoint-API
+      symfony serve
+      ```
+
+12. 🌐 **Accéder à l'application** :
+    - Front-end : Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
+    - Back-end : L'API sera accessible à l'adresse [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
 ---
 
-**Remarque ⚠️ :**
-- Si vous rencontrez des erreurs de dépendances lors du build Next.js, vérifiez que tous les modules nécessaires sont installés (`next`, `@tailwindcss/postcss`, etc.).
+**Remarques importantes ⚠️ :**
+- Ne partagez jamais vos fichiers `.env.local`, clés privées ou identifiants sensibles.
 - Pour toute question, consultez la section Contact en bas du README. 💬
 
 ## Parties du projet 📁
