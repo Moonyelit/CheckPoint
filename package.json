@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@types/estree": "^1.0.8",
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "^24.0.10",
+    "@types/offscreencanvas": "^2019.7.3",
+    "@types/trusted-types": "^2.0.7",
+    "@types/webxr": "^0.5.22"
+  }
+}
