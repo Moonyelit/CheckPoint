@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CheckPoint Stop
+Comment=Arrête tous les services CheckPoint
+Exec=/home/elodie-perso/Bureau/CheckPoint/stop-full-checkpoint.sh
+Icon=process-stop
+Terminal=true
+Categories=Development; 

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CheckPoint Launcher
+Comment=Démarre MySQL et Apache2 pour CheckPoint
+Exec=/home/elodie-perso/Bureau/CheckPoint/start-checkpoint.sh
+Icon=server
+Terminal=true
+Categories=Development; 
