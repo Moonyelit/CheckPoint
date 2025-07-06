@@ -1,7 +1,1 @@
-[submodule "CheckPoint-API"]
-	path = CheckPoint-API
-	url = https://github.com/Moonyelit/CheckPoint-API.git
-
-[submodule "CheckPoint-Next.JS"]
-	path = CheckPoint-Next.JS
-	url = https://github.com/Moonyelit/CheckPoint-Next.JS.git
+# Fichier .gitmodules vide - les sous-modules ont été supprimés

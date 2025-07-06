@@ -22,8 +22,8 @@ Ce projet s'adresse aux passionnés de jeux vidéo souhaitant garder une trace d
 
 ## Structure du dossier 📂
 Voici un aperçu de l'organisation des fichiers et dossiers importants :
-- `CheckPoint-API/` : Contient le back-end du projet, incluant l'API, la gestion des utilisateurs, la connexion, et l'intégration avec l'API IGDB. Ce dossier correspond à un repository GitHub privé.
-- `CheckPoint-Next.JS/` : Contient le front-end du projet, développé avec Next.js. Ce dossier correspond également à un repository GitHub privé.
+- `CheckPoint-API/` : **Sous-module Git** contenant le back-end du projet (API Symfony, gestion des utilisateurs, connexion, intégration IGDB). Ce dossier est lié au repository GitHub : https://github.com/Moonyelit/CheckPoint-API.git
+- `CheckPoint-Next.JS/` : **Sous-module Git** contenant le front-end du projet (Next.js). Ce dossier est lié au repository GitHub : https://github.com/Moonyelit/CheckPoint-Next.JS.git
 - `Figma/Images/` : Contient toutes les images utilisées pour la conception des maquettes dans Figma.
 - `.gitmodules` : Fichier permettant de gérer les sous-modules Git pour lier les repositories CheckPoint-API et CheckPoint-Next.JS.
 - `CheckPoint.docx` : Document présentant le projet dans le cadre de la validation de votre certification Bac +2.
@@ -44,8 +44,12 @@ Pour démarrer avec ce projet :
    ```bash
    git clone --recurse-submodules https://github.com/Moonyelit/CheckPoint.git
    cd CheckPoint
-   git submodule update --init --recursive
-   ```
+      ```
+      
+   > **Si les dossiers `CheckPoint-API` ou `CheckPoint-Next.JS` sont absents, exécutez la commande suivante pour restaurer les sous-modules :**
+   > ```bash
+   > git submodule update --init --recursive
+   > ```
 
 2. 📦 **Installer les dépendances pour le front-end (Next.js)** :
    ```bash
