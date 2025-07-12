@@ -6,5 +6,9 @@
     "@types/offscreencanvas": "^2019.7.3",
     "@types/trusted-types": "^2.0.7",
     "@types/webxr": "^0.5.22"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.0",
+    "react-chartjs-2": "^5.3.0"
   }
 }
